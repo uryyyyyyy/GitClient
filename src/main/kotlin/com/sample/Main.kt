@@ -14,15 +14,11 @@ object Main {
 		val targetFolder = "/media/shiba/shibaHDD/develop/git/testRepo/"
 		val maintenanceBranch = "master"
 		val maintenanceHash = "7aa87e634cb78a7c4b36a43eb29acd6063e55a59"
-		val topicHash = "ffe3a9da7e1aaf3113570cd7107cfbbdb8103a86"
+		val topicHash = "99f515124de440190fe9cf70d1b11c6c0d817990"
 
 		val repository: FileRepository = FileRepository(File(targetFolder + Constants.DOT_GIT))
 		val git = Git(repository)
 		try {
-			git.branchList().call().forEach { v -> println(v) }
-			println("--change branch--")
-			git.checkout().setName("refs/heads/$maintenanceBranch").call()
-
 			println("--stash local change--")
 			val stash = git.stashCreate().call()
 			System.out.println("Created stash " + stash)
@@ -31,14 +27,23 @@ object Main {
 			val fResult = git.fetch().call()
 			println(fResult.getURI().toString())
 
+			println("--change branch--")
+			git.checkout().setName("refs/heads/$maintenanceBranch").call()
+
 			println("--git-svn rebase--")
 			val s1 = Util.externalCommandExec("./shell/gitSvnRebase.sh")
 			println(s1)
 
+			println("--git push force(when svn repo was updated)--")
+			git.push().setForce(true).call()
+
 			println("--merge--")
+			val topicBranch = Util.findBranchNameFromHeadHash(git, topicHash)
+			println("merge $maintenanceBranch <- $topicBranch")
 			val targetRev = Util.findRevCommit(git, topicHash)
 			val mResult = git.merge().include(targetRev).call()
 			if (!mResult.getMergeStatus().isSuccessful()) {
+				println("Error: conflict happen")
 				mResult.getConflicts().forEach { v -> println(v) }
 				throw IOException("conflict error: " + mResult.getConflicts().keySet().join(","))
 			}
@@ -48,16 +53,17 @@ object Main {
 			println(authorName)
 
 			println("--git-svn dcommit--")
-			val s2 = Util.externalCommandExec("./shell/gitSvnDcommit.sh")
+			val s2 = Util.externalCommandExec("./shell/gitSvnDcommit.sh", authorName)
 			println(s2)
 
-			println("--git push force--")
+			println("--git push force(update git-svn_dcommit data)--")
 			git.push().setForce(true).call()
 
+			println("Success: all done")
 		}catch(e:Exception){
+			e.printStackTrace()
 			println("--reset hard--")
 			git.reset().setMode(ResetCommand.ResetType.HARD).setRef(maintenanceHash).call()
-			e.printStackTrace()
 		}
 	}
 }

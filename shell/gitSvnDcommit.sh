@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 
-echo `echo $1 | git svn dcommit --username $2`
+echo $1
+echo $2
+
+#echo `echo $1 | git svn dcommit --username $2`

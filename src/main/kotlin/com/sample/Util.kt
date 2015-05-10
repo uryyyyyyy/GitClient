@@ -1,6 +1,7 @@
 package com.sample
 
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.api.ListBranchCommand
 import org.eclipse.jgit.revwalk.RevCommit
 import org.eclipse.jgit.revwalk.RevWalk
 import java.io.BufferedReader
@@ -27,5 +28,10 @@ object Util {
 		val walk = RevWalk(git.getRepository())
 		val objectId = git.getRepository().resolve(commitHash)
 		return walk.parseCommit(objectId)
+	}
+
+	platformStatic fun findBranchNameFromHeadHash(git: Git, commitHash : String):String {
+		val allList = git.branchList().setListMode(ListBranchCommand.ListMode.REMOTE).call()
+		return allList.filter { v -> v.getObjectId().getName() == commitHash }.first().getName()
 	}
 }
