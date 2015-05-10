@@ -23,7 +23,7 @@ dependencies {
 	testCompile 'junit:junit:4.11'
 }
 
-mainClassName = 'Example'
+mainClassName = 'com.sample.Main'
 
 task wrapper(type: Wrapper) {
 	gradleVersion = '2.2'
