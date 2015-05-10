@@ -1,32 +1,41 @@
-# InitialProject
 
-## setup
+## これは何？
 
-`./gradlew [idea | eclipse]`
+メインリポジトリはsvnなんだけど開発時はgitlabなどgitのサーバーを使いたい。
 
-you can open [idea | eclipse] project
+そんなときに使う。
 
-## run dynamically
 
-`./gradlew run`
+## 構成
 
-## compile jar
+- ツールのログを表示する何か（jenkins）
+- gitのホストサーバー（gitlab）
+- svnサーバー（trac）
 
-`./gradlew clean`
+これらを用意する。
 
-`./gradlew jar`
+まず、git-svnを置きたいところで、svnリポジトリの特定のフォルダを以下のように落とす。
 
-you can get jar(dependencies) file in `build/libs`
+```
+git-svn clone <http://svn/repo/hoge>
+```
 
-## API
+あるいは
 
-必要があればcloneする。既にあればリモートと同期する
+```
+git svn init <http://svn/repo/hoge>`
+git svn fetch
+```
 
-デフォルトではブランチを最新の状態にする。
+次に、
 
-あるフォルダ以下のファイル一覧を取得する。
+- git-svnリポジトリを置くところ
 
-ブランチを切り替える。
 
-特定のコミットのファイル一覧を取得する。
+## このツールを動かすための前提条件
 
+- svnのアカウントは、ユーザー名とパスワードが同じで、ユーザー名は自分のgitConfigのuser.nameの値と同じとする。
+	- 違う場合は適宜直す。ただしパスワードは必須。
+- 事前にgit-svnリポジトリが用意されているものとする。（上記に記載）
+
+- git-svnのgitのリモートはsshで接続されていて、そのアカウントはforcePushの権限を持っているとする。
