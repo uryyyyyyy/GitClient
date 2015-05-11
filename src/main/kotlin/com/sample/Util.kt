@@ -6,22 +6,28 @@ import org.eclipse.jgit.revwalk.RevCommit
 import org.eclipse.jgit.revwalk.RevWalk
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.ArrayList
 import kotlin.platform.platformStatic
 
 object Util {
-	platformStatic fun externalCommandExec(vararg strs : String):String {
+	platformStatic fun externalCommandExec(vararg strs : String):Pair<List<String>, Int> {
 		val pb = ProcessBuilder(*strs)
 		val process = pb.start()
 
 		process.waitFor()
 		val is_ = process.getInputStream()
-		val br = BufferedReader(InputStreamReader(is_))
-		val sb = StringBuilder()
-		br.forEachLine { v->
-			sb.append(v)
-			sb.append(System.lineSeparator())
+		val es_ = process.getErrorStream()
+		process.waitFor()
+
+		val list0 = ArrayList<String>()
+		val list1 = ArrayList<String>()
+		BufferedReader(InputStreamReader(is_)).forEachLine { v->list0.add(v)}
+		BufferedReader(InputStreamReader(es_)).forEachLine { v->list1.add(v)}
+		if(list0.size() > list1.size()){
+			return Pair(list0, 0)
+		}else{
+			return Pair(list1, 1)
 		}
-		return sb.toString()
 	}
 
 	platformStatic fun findRevCommit(git: Git, commitHash : String):RevCommit {

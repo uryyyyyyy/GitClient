@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-echo $1
-echo $2
+echo "path: $1"
+echo "userPass: $2"
+echo "userName: $3"
 
-#echo `echo $1 | git svn dcommit --username $2`
+cd $1
+echo `echo $2 | git svn dcommit --username $3`

@@ -29,21 +29,8 @@ task wrapper(type: Wrapper) {
 	gradleVersion = '2.2'
 }
 
-version = '0.1-SNAPSHOT'
-
-jar {
-	manifest {
-		attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
+run {
+	if (project.hasProperty('args')) {    // "args" というプロパティが渡されていたら
+		args project.args.split('\\s+')   // 空白文字で split して、 run タスクの args オプションにセットする
 	}
 }
-
-task copyDependencies << {
-	println ':copy depend to build/libs'
-	new File('build/libs').mkdirs()
-	copy {
-		from configurations.runtime
-		into 'build/libs'
-	}
-}
-
-jar.dependsOn copyDependencies
