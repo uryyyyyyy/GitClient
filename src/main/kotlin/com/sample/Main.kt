@@ -53,7 +53,7 @@ object Main {
 				s1.first.forEach { v ->  println(v)}
 				throw IOException("shell Error: ")
 			}
-			s1.first.forEach { v ->  println(v)}
+			println(s1.first)
 
 			println("--git push force(when svn repo was updated)--")
 			git.branchDelete().setBranchNames(maintenanceBranch).setForce(true).call()
@@ -78,12 +78,12 @@ object Main {
 			}
 
 			println("--git-svn dcommit--")
-			val s2 = Util.externalCommandExec("./shell/gitSvnDcommit.sh", targetFolder, authorName, authorName)
+			val s2 = Util.externalCommandExec2("./shell/gitSvnDcommit.sh", targetFolder, authorName, authorName)
 			if(s2.second != 0){
 				println("Error: svn reject your commit. check your commit [merge old commit] or [svn hook]")
 				s2.first.forEach { v ->  println(v)}
 			}
-			s2.first.forEach { v ->  println(v)}
+			println(s2.first)
 
 			println("--git push force(update git-svn_dcommit data)--")
 			git.branchDelete().setBranchNames(maintenanceBranch).setForce(true).call()

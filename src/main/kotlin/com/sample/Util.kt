@@ -10,7 +10,12 @@ import java.util.ArrayList
 import kotlin.platform.platformStatic
 
 object Util {
-	platformStatic fun externalCommandExec(vararg strs : String):Pair<List<String>, Int> {
+	platformStatic fun externalCommandExec(vararg strs : String):Pair<String, Int> {
+		val bytes = externalCommandExec_(*strs)
+		return Pair(String(bytes.first, "UTF-8"), bytes.second)
+	}
+
+	platformStatic fun externalCommandExec_(vararg strs : String):Pair<ByteArray, Int> {
 		val pb = ProcessBuilder(*strs)
 		val process = pb.start()
 
@@ -19,14 +24,12 @@ object Util {
 		val es_ = process.getErrorStream()
 		process.waitFor()
 
-		val list0 = ArrayList<String>()
-		val list1 = ArrayList<String>()
-		BufferedReader(InputStreamReader(is_)).forEachLine { v->list0.add(v)}
-		BufferedReader(InputStreamReader(es_)).forEachLine { v->list1.add(v)}
-		if(list0.size() > list1.size()){
-			return Pair(list0, 0)
+		val is_Bytes = is_.readBytes()
+		val es_Bytes = es_.readBytes()
+		if(is_Bytes.size() > es_Bytes.size()){
+			return Pair(is_Bytes, 0)
 		}else{
-			return Pair(list1, 1)
+			return Pair(es_Bytes, 1)
 		}
 	}
 
@@ -39,5 +42,10 @@ object Util {
 	platformStatic fun findBranchNameFromHeadHash(git: Git, commitHash : String):String {
 		val allList = git.branchList().setListMode(ListBranchCommand.ListMode.REMOTE).call()
 		return allList.filter { v -> v.getObjectId().getName() == commitHash }.first().getName()
+	}
+
+	platformStatic fun externalCommandExec2(vararg strs : String):Pair<String, Int> {
+		val bytes = externalCommandExec_(*strs)
+		return Pair(String(bytes.first, "MS932"), bytes.second)
 	}
 }
