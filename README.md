@@ -1,4 +1,3 @@
-
 ## これは何？
 
 メインリポジトリはsvnなんだけど、開発時は部分的にgitサーバー（gitlabなど）を使いたい。
@@ -58,6 +57,37 @@ tagはsvnで管理されてるなら開発中は必要ないはず。）
 git checkout svn/<branch>
 git checkout -b <branch>
 git push origin <branch>
+```
+
+### updateスクリプト（gitlabの場合）
+
+/opt/gitlab/embedded/service/gitlab-shell/hooks/update など
+
+gitlabに実行権限を与えておく
+
+
+```
+LOG_PATH=/home/ubuntu/gitlabUpdateLog.txt
+echo "gitlab update hook start"  >> LOG_PATH
+echo $1 >> LOG_PATH
+echo $2 >> LOG_PATH
+echo $3 >> LOG_PATH
+
+REVS=`git rev-list --parents -n 1 $3` >> /home/shiba/mm.txt
+
+mainHead=`echo $REVS | cut -c 42-81`
+topicHead=`echo $REVS | cut -c 83-122`
+    
+echo "revs"  >> LOG_PATH
+echo $REVS >> LOG_PATH
+echo $mainHead >> LOG_PATH
+echo $topicHead >> LOG_PATH
+    
+if [ -n "$topicHead" ]; then
+   curl -X POST http://172.27.51.24:8081/job/kicker/buildWithParameters?topicHead=$topicHead
+fi
+echo "gitlab update hook end" >> LOG_PATH
+
 ```
 
 
