@@ -64,6 +64,7 @@ object Util {
 			val tmp = String(bytes, "UTF8").getBytes("UTF8")
 			return Arrays.equals(tmp, bytes);
 		}catch(e:UnsupportedEncodingException) {
+			println("UnsupportedEncoding: UTF8")
 			return false;
 		}
 	}
@@ -73,6 +74,7 @@ object Util {
 			val tmp = String(bytes, "Shift_JIS").getBytes("Shift_JIS")
 			return Arrays.equals(tmp, bytes);
 		}catch(e:UnsupportedEncodingException) {
+			println("UnsupportedEncoding: Shift_JIS")
 			return false;
 		}
 	}
@@ -82,6 +84,7 @@ object Util {
 			val tmp = String(bytes, "MS932").getBytes("MS932")
 			return Arrays.equals(tmp, bytes);
 		}catch(e:UnsupportedEncodingException) {
+			println("UnsupportedEncoding: MS932")
 			return false;
 		}
 	}
