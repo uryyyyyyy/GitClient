@@ -90,6 +90,17 @@ echo "gitlab update hook end" >> LOG_PATH
 
 ```
 
+### jenkinsのジョブ設定例
+
+フリージョブ
+
+
+```
+
+cd /home/shiba/Desktop/gitSvnHelper/
+./gradlew run -Pargs="svn/ /home/uryyyyyyy/gitSvnTest/ trunk $topicHash"
+```
+
 
 ## ツールの引数
 
