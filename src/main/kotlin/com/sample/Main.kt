@@ -50,7 +50,7 @@ object Main {
 			val s1 = Util.externalCommandExec("./shell/gitSvnRebase.sh", targetFolder, authorName, authorName)
 			if(s1.second != 0){
 				println("Error: in this git-svn repo, $maintenanceBranch branch status is something wrong")
-				s1.first.forEach { v ->  println(v)}
+				println(s1.first)
 				throw IOException("shell Error: ")
 			}
 			println(s1.first)
@@ -81,7 +81,8 @@ object Main {
 			val s2 = Util.externalCommandExec2("./shell/gitSvnDcommit.sh", targetFolder, authorName, authorName)
 			if(s2.second != 0){
 				println("Error: svn reject your commit. check your commit [merge old commit] or [svn hook]")
-				s2.first.forEach { v ->  println(v)}
+				println(s2.first)
+				throw IOException("shell Error: ")
 			}
 			println(s2.first)
 
