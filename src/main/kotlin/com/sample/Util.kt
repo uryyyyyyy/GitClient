@@ -54,6 +54,7 @@ object Util {
 			println("MS932")
 			String(bytes, "MS932")
 		}else{
+			println("nothing")
 			""
 		}
 	}
