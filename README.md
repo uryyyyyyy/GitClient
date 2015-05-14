@@ -102,13 +102,17 @@ cd /home/shiba/Desktop/gitSvnHelper/
 ```
 
 
-## ツールの引数
+## ツールのビルド
 
-`./gradlew run -Pargs="<svnPrefix> <targetFolder> <maintenanceBranch> <topicHash>"`
+./gradlew clean fatJar
+
+## ツールの実行
+
+`java -jar ./build/libs/gitSvnTool.jar <svnPrefix> <targetFolder> <maintenanceBranch> <topicHash>`
 
 入力例
 
-`./gradlew run -Pargs="svn/ /home/uryyyyyyy/gitSvnTest/ trunk 8e80f03163c16742ee820297117de7a61370fee6"`
+`java -jar ./build/libs/gitSvnTool.jar svn/ /home/uryyyyyyy/gitSvnTest/ trunk 8e80f03163c16742ee820297117de7a61370fee6`
 
 
 ## memo
