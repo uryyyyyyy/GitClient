@@ -68,6 +68,7 @@ object Main {
 
 			println("--merge--")
 			val topicBranch = Util.findBranchNameFromHeadHash(git, topicHash)
+			println("topicBranch: $topicBranch")
 			println("merge $maintenanceBranch <- $topicBranch")
 			val mResult = git.merge().include(targetRev).call()
 			if (!mResult.getMergeStatus().isSuccessful()) {
