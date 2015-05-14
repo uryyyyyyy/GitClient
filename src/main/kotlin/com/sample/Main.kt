@@ -78,7 +78,7 @@ object Main {
 			}
 
 			println("--git-svn dcommit--")
-			val s2 = Util.externalCommandExec2("./shell/gitSvnDcommit.sh", targetFolder, authorName, authorName)
+			val s2 = Util.externalCommandExec("./shell/gitSvnDcommit.sh", targetFolder, authorName, authorName)
 			if(s2.second != 0){
 				println("Error: svn reject your commit. check your commit [merge old commit] or [svn hook]")
 				println(s2.first)

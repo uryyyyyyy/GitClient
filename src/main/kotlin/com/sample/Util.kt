@@ -4,15 +4,14 @@ import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.ListBranchCommand
 import org.eclipse.jgit.revwalk.RevCommit
 import org.eclipse.jgit.revwalk.RevWalk
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.util.ArrayList
+import java.io.UnsupportedEncodingException
+import java.util.Arrays
 import kotlin.platform.platformStatic
 
 object Util {
 	platformStatic fun externalCommandExec(vararg strs : String):Pair<String, Int> {
 		val bytes = externalCommandExec_(*strs)
-		return Pair(String(bytes.first, "UTF-8"), bytes.second)
+		return Pair(byteToStr(bytes.first), bytes.second)
 	}
 
 	platformStatic fun externalCommandExec_(vararg strs : String):Pair<ByteArray, Int> {
@@ -44,8 +43,45 @@ object Util {
 		return allList.filter { v -> v.getObjectId().getName() == commitHash }.first().getName()
 	}
 
-	platformStatic fun externalCommandExec2(vararg strs : String):Pair<String, Int> {
-		val bytes = externalCommandExec_(*strs)
-		return Pair(String(bytes.first, "MS932"), bytes.second)
+	platformStatic fun byteToStr(bytes : ByteArray):String {
+		return if(isUTF8(bytes)){
+			println("utf8")
+			String(bytes, "UTF8")
+		}else if(isSJIS(bytes)){
+			println("Shift_JIS")
+			String(bytes, "Shift_JIS")
+		}else if(isMS932(bytes)){
+			println("MS932")
+			String(bytes, "MS932")
+		}else{
+			""
+		}
+	}
+
+	platformStatic fun isUTF8(bytes : ByteArray):Boolean {
+		try{
+			val tmp = String(bytes, "UTF8").getBytes("UTF8")
+			return Arrays.equals(tmp, bytes);
+		}catch(e:UnsupportedEncodingException) {
+			return false;
+		}
+	}
+
+	platformStatic fun isSJIS(bytes : ByteArray):Boolean {
+		try{
+			val tmp = String(bytes, "Shift_JIS").getBytes("Shift_JIS")
+			return Arrays.equals(tmp, bytes);
+		}catch(e:UnsupportedEncodingException) {
+			return false;
+		}
+	}
+
+	platformStatic fun isMS932(bytes : ByteArray):Boolean {
+		try{
+			val tmp = String(bytes, "MS932").getBytes("MS932")
+			return Arrays.equals(tmp, bytes);
+		}catch(e:UnsupportedEncodingException) {
+			return false;
+		}
 	}
 }
