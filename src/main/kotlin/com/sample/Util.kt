@@ -9,12 +9,8 @@ import java.util.Arrays
 import kotlin.platform.platformStatic
 
 object Util {
-	platformStatic fun externalCommandExec(vararg strs : String):Pair<String, Int> {
-		val bytes = externalCommandExec_(*strs)
-		return Pair(byteToStr(bytes.first), bytes.second)
-	}
 
-	platformStatic fun externalCommandExec_(vararg strs : String):Pair<ByteArray, Int> {
+	platformStatic fun externalCommandExec(vararg strs : String):Pair<String, Int> {
 		val pb = ProcessBuilder(*strs)
 		val process = pb.start()
 
@@ -26,9 +22,9 @@ object Util {
 		val is_Bytes = is_.readBytes()
 		val es_Bytes = es_.readBytes()
 		if(is_Bytes.size() > es_Bytes.size()){
-			return Pair(is_Bytes, 0)
+			return Pair(byteToStr(is_Bytes), 0)
 		}else{
-			return Pair(es_Bytes, 1)
+			return Pair(byteToStr(es_Bytes), 1)
 		}
 	}
 
@@ -45,13 +41,10 @@ object Util {
 
 	platformStatic fun byteToStr(bytes : ByteArray):String {
 		return if(isSJIS(bytes)){
-			println("Shift_JIS")
 			String(bytes, "Shift_JIS")
 		}else if(isMS932(bytes)){
-			println("MS932")
 			String(bytes, "MS932")
 		}else if(isUTF8(bytes)){
-			println("utf8")
 			String(bytes, "UTF8")
 		}else{
 			println("nothing")
