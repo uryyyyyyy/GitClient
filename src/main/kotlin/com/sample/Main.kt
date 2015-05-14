@@ -100,6 +100,7 @@ object Main {
 			println("--reset hard--")
 			git.reset().setMode(ResetCommand.ResetType.HARD).setRef(maintenanceHash).call()
 			Util.externalCommandExec("./shell/rmGitSvnRebaseApply.sh", targetFolder)
+			throw Exception("Fail: check logs")
 		}
 	}
 }
