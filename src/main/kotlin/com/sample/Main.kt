@@ -1,5 +1,6 @@
 package com.sample
 
+import com.jcraft.jsch.JSch
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.ResetCommand
 import org.eclipse.jgit.api.errors.TransportException
@@ -7,15 +8,22 @@ import org.eclipse.jgit.internal.storage.file.FileRepository
 import org.eclipse.jgit.lib.Constants
 import java.io.File
 import java.io.IOException
+import java.util.Hashtable
 import kotlin.platform.platformStatic
 
 object Main {
 
 	platformStatic fun main(args: Array<String>){
-		val svnPrefix = "svn/"
-		val targetFolder = "/home/shiba/Desktop/gitsvn2/gitSvnTest/"//args[0]//"/media/shiba/shibaHDD/develop/git/testRepo/"
-		val maintenanceBranch = "trunk"//args[1]//"master"
-		val topicHash = "8e80f03163c16742ee820297117de7a61370fee6"//args[2]//"99f515124de440190fe9cf70d1b11c6c0d817990"
+		val svnPrefix = args[0]
+		val targetFolder = args[1]
+		val maintenanceBranch = args[2]
+		val topicHash = args[3]
+		println("svnPrefix = $svnPrefix")
+		println("targetFolder = $targetFolder")
+		println("maintenanceBranch = $maintenanceBranch")
+		println("topicHash = $topicHash")
+
+		JSch.setConfig("StrictHostKeyChecking", "no")
 
 		val repository: FileRepository = FileRepository(File(targetFolder + Constants.DOT_GIT))
 		val git = Git(repository)
