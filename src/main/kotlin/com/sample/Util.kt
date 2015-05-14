@@ -44,15 +44,15 @@ object Util {
 	}
 
 	platformStatic fun byteToStr(bytes : ByteArray):String {
-		return if(isUTF8(bytes)){
-			println("utf8")
-			String(bytes, "UTF8")
-		}else if(isSJIS(bytes)){
+		return if(isSJIS(bytes)){
 			println("Shift_JIS")
 			String(bytes, "Shift_JIS")
 		}else if(isMS932(bytes)){
 			println("MS932")
 			String(bytes, "MS932")
+		}else if(isUTF8(bytes)){
+			println("utf8")
+			String(bytes, "UTF8")
 		}else{
 			println("nothing")
 			""
